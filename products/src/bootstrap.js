@@ -1,11 +1,38 @@
 import faker from 'faker';
 
-let products = '';
+// имитация работы компонента
+const mount = (el) => {
+  let products = '';
 
-for (let i = 0; i < 13; i++) {
-  const name = faker.commerce.productName();
-  products += `<div>${name}</div>`;
+  for (let i = 0; i < 13; i++) {
+    const name = faker.commerce.productName();
+    products += `<div>${name}</div>`;
 
+  }
+  el.innerHTML = products;
 }
 
-document.querySelector("#dev-products").innerHTML = products;
+//                            ситуация 1
+// Мы запустили наш фаил в среде разработке в изоляции от
+// остальной части проекта
+// Мы используем наш локальный index.html
+// Мы точно уверены, что она содержит id с dev-products, так как
+// это фаил часть нашего проекта и мы сами определяем его
+// Мы хотим немедленно отрендерить наше приложение
+if (process.env.NODE_ENV === 'development') {
+  const el = document.querySelector('#dev-products');
+  // считаем, что только у нас есть это id. При необходимости
+  // сделать его максимально уникальным dev-products-inner-app
+
+  // монтируем его
+  if (el) mount(el);
+}
+
+
+//                              ситуация 2
+// Мы запустили наш фаил в среде разработке или продакшене через
+// контейнер (container)
+// Тут нет гарантий, что index.html будет содержать нужный нам id,
+// так как не наша команда отвечает за его настройку
+// Этому компоненту НЕ НУЖНО быть отрисованным немедленно
+export { mount };

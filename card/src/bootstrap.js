@@ -1,6 +1,32 @@
 import faker from 'faker';
 
-let cartText = `<div>You have ${faker.random.number()} items in your cart</div>`;
+const mount = (el) => {
+  let cartText = `<div>You have ${faker.random.number()} items in your cart</div>`;
+
+  el.innerHTML = cartText;
+}
+
+//                            ситуация 1
+// Мы запустили наш фаил в среде разработке в изоляции от
+// остальной части проекта
+// Мы используем наш локальный index.html
+// Мы точно уверены, что она содержит id с dev-cart, так как
+// это фаил часть нашего проекта и мы сами определяем его
+// Мы хотим немедленно отрендерить наше приложение
+if (process.env.NODE_ENV === 'development') {
+  const el = document.querySelector("#dev-cart");
+  // считаем, что только у нас есть это id. При необходимости
+  // сделать его максимально уникальным dev-cart-inner-app
+
+  // монтируем его
+  if (el) mount(el);
+}
 
 
-document.querySelector("#dev-cart").innerHTML = cartText;
+//                              ситуация 2
+// Мы запустили наш фаил в среде разработке или продакшене через
+// контейнер (container)
+// Тут нет гарантий, что index.html будет содержать нужный нам id,
+// так как не наша команда отвечает за его настройку
+// Этому компоненту НЕ НУЖНО быть отрисованным немедленно
+export { mount };

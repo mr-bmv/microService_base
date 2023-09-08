@@ -14,7 +14,7 @@ module.exports = {
       name: 'products',
       filename: 'remoteEntry.js',
       exposes: {
-        './ProductsIndex': './src/index'
+        './ProductsIndex': './src/bootstrap.js'
       },
       // указываем библиотеки, которые будут общими с другими компонентами
       //                               вариант 1
